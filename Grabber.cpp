@@ -1,12 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Grabber.h"
-#include "GameFramework/PlayerController.h"
-#include "GameFramework/Controller.h"
-#include "Private/PlayerController.cpp"
+//#include "GameFramework/PlayerController.h"
+//#include "GameFramework/Controller.h"
+//#include "Private/PlayerController.cpp"
 #include "Engine/World.h"
 #include "Math/Vector.h"
 #include "Math/Rotator.h"
+#include "Math/Color.h"
 
 //defining macro which returns nothing
 //useful for in-code annotation
@@ -46,8 +47,21 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		OUT PlayerViewPointRotation
 	);
 	//Log  player viewpoint
-	UE_LOG(LogTemp, Warning, TEXT("Location: %s, Position: %s"), *PlayerViewPointLocation.ToString(), *PlayerViewPointRotation.ToString()); 
-	//Ray-casting out to reach distance
+	UE_LOG(LogTemp, Warning, TEXT("Location: %s, Position: %s"), *PlayerViewPointLocation.ToString(), *PlayerViewPointRotation.ToString())
+	//Calculate LineTraceEnd
+	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerViewPointRotation.Vector() * Reach);
+	//Draw red-trace to visualise
+	DrawDebugLine(
+		GetWorld(),
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FColor(255, 0, 0),
+		false,
+		0.f,
+		0.f,
+		10.f
+	);
+	//Ray-casting (line-trace) out to reach distance
 
 	//See what we hit
 
